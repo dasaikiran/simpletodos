@@ -1,6 +1,9 @@
 import {Component} from 'react'
+import {v4 as uuidV4} from 'uuid'
+
 import TodoItem from '../TodoItem'
 import './index.css'
+
 const initialTodosList = [
   {
     id: 1,
@@ -38,25 +41,114 @@ const initialTodosList = [
 
 // Write your code here
 class SimpleTodos extends Component {
-  state = {todoItemsList: initialTodosList}
+  state = {todoItemsList: initialTodosList, newTodoVal: ''}
+
+  componentDidMount = () => {
+    this.modifyTodoList()
+  }
+
+  modifyTodoList = () => {
+    const {todoItemsList} = this.state
+    const newTodoList = todoItemsList.map(item => ({
+      id: uuidV4(),
+      title: item.title,
+    }))
+    this.setState({
+      todoItemsList: newTodoList,
+    })
+  }
+
   onDelete = id => {
     const {todoItemsList} = this.state
     const newTodoList = todoItemsList.filter(item => item.id !== id)
     this.setState({todoItemsList: newTodoList})
   }
 
-  render() {
+  onInputChange = event => {
+    this.setState({
+      newTodoVal: event.target.value,
+    })
+  }
+
+  onAddClick = () => {
+    const {newTodoVal, todoItemsList} = this.state
+    const val = newTodoVal
+    const valList = val.split(' ')
+    const num = parseInt(valList[valList.length - 1])
+    console.log(num)
+    if (num.isNaN) {
+      const obj = {
+        id: uuidV4(),
+        title: newTodoVal,
+      }
+      const newTodoList = [...todoItemsList, obj]
+      console.log(newTodoList)
+      this.setState({
+        todoItemsList: newTodoList,
+      })
+    } else {
+      const todoVal = valList.slice(0, valList.length - 1).join(' ')
+      const li = []
+      for (let i = 0; i < num; i += 1) {
+        const obj = {
+          id: uuidV4(),
+          title: todoVal,
+        }
+        li.push(obj)
+      }
+      const newTodoList = [...todoItemsList, ...li]
+      this.setState({
+        todoItemsList: newTodoList,
+      })
+    }
+  }
+
+  onEditValue = (id, val) => {
     const {todoItemsList} = this.state
+    const newTodoList = todoItemsList.map(item => {
+      if (item.id === id) {
+        const obj = {
+          id,
+          title: val,
+        }
+        return obj
+      }
+      return item
+    })
+    this.setState({
+      todoItemsList: newTodoList,
+    })
+  }
+
+  render() {
+    const {todoItemsList, newTodoVal} = this.state
     return (
       <div className="bg-container">
         <div className="card">
           <h1 className="heading">Simple Todos</h1>
+          <div>
+            <input
+              onChange={this.onInputChange}
+              type="text"
+              value={newTodoVal}
+              className="input"
+            />
+            <button
+              onClick={this.onAddClick}
+              className="add-button"
+              type="button"
+              aria-label="addButton"
+            >
+              Add
+            </button>
+          </div>
           <ul className="todo-container">
             {todoItemsList.map(item => (
               <TodoItem
                 listObject={item}
                 key={item.id}
                 onDelete={this.onDelete}
+                onEditVal={this.onEditValue}
               />
             ))}
           </ul>

@@ -1,1 +1,50 @@
 /* Write your CSS here */
+
+.bg-container {
+  background-color: #ffc2a0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.card {
+  background-color: antiquewhite;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.heading {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 50px;
+  font-family: 'Roboto';
+  color: #ff8542;
+  text-align: center;
+}
+
+.input {
+  width: 500px;
+  height: 30px;
+  border: 0px solid;
+  background-color: aliceblue;
+  outline-color: #ff8542;
+  font-size: 15px;
+}
+
+.add-button {
+  border: 0px solid;
+  background-color: #ff8542;
+  color: whitesmoke;
+  font-size: 12px;
+  font-weight: bold;
+  width: 100px;
+  height: 30px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.todo-container {
+  list-style-type: none;
+  padding-left: 0px;
+  display: flex;
+  flex-direction: column;
+}
